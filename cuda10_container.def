@@ -1,0 +1,28 @@
+Bootstrap: docker
+From: pytorch/pytorch:1.4-cuda10.1-cudnn7-devel
+
+%labels
+  Author Sarah Mueller
+  Version 0.1
+
+%post
+export PATH=/opt/conda/bin:$PATH
+
+# fix for Public GPG key error
+rm /etc/apt/sources.list.d/cuda.list
+rm /etc/apt/sources.list.d/nvidia-ml.list
+
+apt-get update --fix-missing
+
+ln -fs /usr/share/zoneinfo/Europe/Berlin /etc/localtime
+
+
+echo '------------------------------------------------------------------'
+echo 'Versions of installed tools:'
+echo 'cuda:' $(nvcc --version)
+echo 'cudnn:' $(find /usr -name "*cudnn.so.*")
+echo '------------------------------------------------------------------'
+
+
+
+
