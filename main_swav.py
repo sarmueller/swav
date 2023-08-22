@@ -30,7 +30,7 @@ from src.utils import (
     AverageMeter,
     init_distributed_mode,
 )
-from src.multicropdataset import MultiCropDataset
+from src.multicropdataset import MultiCropDataset, CIFAR10MultiCrop
 import src.resnet50 as resnet_models
 
 logger = getLogger()
@@ -50,6 +50,8 @@ parser.add_argument("--min_scale_crops", type=float, default=[0.14], nargs="+",
                     help="argument in RandomResizedCrop (example: [0.14, 0.05])")
 parser.add_argument("--max_scale_crops", type=float, default=[1], nargs="+",
                     help="argument in RandomResizedCrop (example: [1., 0.14])")
+parser.add_argument("--color_distortion_strength", type=float, default=1.0,
+                    help="strength of color distortion")
 
 #########################
 ## swav specific params #
@@ -128,12 +130,14 @@ def main():
     logger, training_stats = initialize_exp(args, "epoch", "loss")
 
     # build data
-    train_dataset = MultiCropDataset(
-        args.data_path,
-        args.size_crops,
-        args.nmb_crops,
-        args.min_scale_crops,
-        args.max_scale_crops,
+    train_dataset = CIFAR10MultiCrop(
+        root=args.data_path,
+        train=True,
+        size_crops=args.size_crops,
+        nmb_crops=args.nmb_crops,
+        min_scale_crops=args.min_scale_crops,
+        max_scale_crops=args.max_scale_crops,
+        color_distortion_strength=args.color_distortion_strength,
     )
     sampler = torch.utils.data.distributed.DistributedSampler(train_dataset)
     train_loader = torch.utils.data.DataLoader(
