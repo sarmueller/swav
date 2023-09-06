@@ -15,7 +15,6 @@ import torch.nn as nn
 import torch.nn.parallel
 import torch.backends.cudnn as cudnn
 import torch.optim
-import torch.utils.data as data
 import torchvision.transforms as transforms
 import torchvision.datasets as datasets
 
@@ -98,20 +97,25 @@ def main():
     )
 
     # build data
-    train_dataset = datasets.ImageFolder(os.path.join(args.data_path, "train"))
-    val_dataset = datasets.ImageFolder(os.path.join(args.data_path, "val"))
+    #train_dataset = datasets.ImageFolder(os.path.join(args.data_path, "train"))
+    #val_dataset = datasets.ImageFolder(os.path.join(args.data_path, "val"))
+    #tr_normalize = transforms.Normalize(
+    #    mean=[0.485, 0.456, 0.406], std=[0.228, 0.224, 0.225]
+    #)
+    train_dataset = datasets.CIFAR10(args.data_path, train=True)
+    val_dataset = datasets.CIFAR10(args.data_path, train=False)
     tr_normalize = transforms.Normalize(
-        mean=[0.485, 0.456, 0.406], std=[0.228, 0.224, 0.225]
+        mean=[0.491, 0.482, 0.447], std=[0.247, 0.243, 0.262]
     )
     train_dataset.transform = transforms.Compose([
-        transforms.RandomResizedCrop(224),
+        transforms.RandomResizedCrop(32),
         transforms.RandomHorizontalFlip(),
         transforms.ToTensor(),
         tr_normalize,
     ])
     val_dataset.transform = transforms.Compose([
-        transforms.Resize(256),
-        transforms.CenterCrop(224),
+        transforms.Resize(32),
+        transforms.CenterCrop(32),
         transforms.ToTensor(),
         tr_normalize,
     ])
