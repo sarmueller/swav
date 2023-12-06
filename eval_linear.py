@@ -137,7 +137,7 @@ def main():
 
     # build model
     model = resnet_models.__dict__[args.arch](output_dim=0, eval_mode=True)
-    linear_classifier = RegLog(1000, args.arch, args.global_pooling, args.use_bn)
+    linear_classifier = RegLog(10, args.arch, args.global_pooling, args.use_bn)
 
     # convert batch norm layers (if any)
     linear_classifier = nn.SyncBatchNorm.convert_sync_batchnorm(linear_classifier)

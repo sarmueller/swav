@@ -63,7 +63,6 @@ def init_distributed_mode(args):
         world_size=args.world_size,
         rank=args.rank,
     )
-
     # set cuda device
     args.gpu_to_work_on = args.rank % torch.cuda.device_count()
     torch.cuda.set_device(args.gpu_to_work_on)

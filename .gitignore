@@ -1,5 +1,8 @@
 experiments
 logfiles
+images
+
+*.sif
 
 # Byte-compiled / optimized / DLL files
 */__pycache__/
